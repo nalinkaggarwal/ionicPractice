@@ -10,4 +10,6 @@ import { ListPage } from './list';
     IonicPageModule.forChild(ListPage),
   ],
 })
-export class ListPageModule {}
+export class ListPageModule {
+  //new line added as comments
+}
