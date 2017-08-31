@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
-
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { TimeSheet } from '../../models/timesheet.model'
+/*
 /*
   Generated class for the TimesheetdetailProvider provider.
 
@@ -11,8 +12,22 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TimesheetdetailProvider {
 
-  constructor(public http: Http) {
-    console.log('Hello TimesheetdetailProvider Provider');
+  constructor(private fire: AngularFireAuth, private db: AngularFireDatabase) {
+
+  }
+
+  punchTime(punchTimesheetDetails: TimeSheet) {
+    var currenrtUserId = this.fire.auth.currentUser.uid;
+    punchTimesheetDetails.UserID = currenrtUserId;
+    var refData = this.db.database.ref('/TimeSheetDetail/')
+      .orderByChild('UserID')
+      .equalTo(currenrtUserId)
+      .on("child_added", function (data) {
+        console.log(data.key);
+      });
+    
+    console.log(refData);
+    //return this.db.list('/TimeSheetDetail/').push(punchTimesheetDetails);
   }
 
 }
